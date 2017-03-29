@@ -1,8 +1,9 @@
 # depslib dependency file v1.0
-1490425531 source:/home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/self_test_main.cpp
+1490759954 source:/home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/self_test_main.cpp
 	<bits/stdc++.h>
 	"algo_hw1.hpp"
 
-1490430549 /home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/algo_hw1.hpp
-	<bits/stdc++.h>
+1490761158 /home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/algo_hw1.hpp
+	<iostream>
+	<algorithm>
 

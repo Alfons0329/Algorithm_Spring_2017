@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/algo_hw1.hpp
+bits/stdc++.h
+-
+
+/home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/main.cpp
+cstdlib
+-
+vector
+-
+iostream
+-
+algorithm
+-
+algo_hw1.hpp
+/home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/algo_hw1.hpp
+gtest/gtest.h
+-
+

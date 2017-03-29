@@ -23,7 +23,7 @@ TEST(AlgoHW1, heapify) {
 	min_heapify(input, sizeof(input) / sizeof(int), 2);
 
 	std::vector<int> output;
-	for (auto i = 0; i < sizeof(input) / sizeof(int); ++i) {
+	for (int i = 0; i < sizeof(input) / sizeof(int); ++i) {
 		output.push_back(input[i]);
 	}
 
@@ -37,7 +37,7 @@ TEST(AlgoHW1, build) {
 	std::vector<int> expected{ 1, 5, 3, 7, 14, 6, 8 };
 
 	std::vector<int> output;
-	for (auto i = 0; i < sizeof(input) / sizeof(int); ++i) {
+	for (int i = 0; i < sizeof(input) / sizeof(int); ++i) {
 		output.push_back(input[i]);
 	}
 
@@ -50,7 +50,7 @@ TEST(AlgoHW1_insert, insert) {
 	std::vector<int> check{ 1, 4, 3, 5, 14, 6, 8 ,7 };
 
 	std::vector<int> output;
-	for (auto i = 0; i < sizeof(input) / sizeof(int); ++i) {
+	for (int i = 0; i < sizeof(input) / sizeof(int); ++i) {
 		output.push_back(input[i]);
 	}
 
@@ -62,7 +62,7 @@ TEST(AlgoHW1, minum) {
 	int expected;
 	min_heap_minimum(input, sizeof(input) / sizeof(int), &expected);
 
-	EXPECT_TRUE(expected == 1);	
+	EXPECT_TRUE(expected == 1);
 }
 
 
@@ -74,7 +74,7 @@ TEST(AlgoHW1, extract) {
 	std::vector<int> expected{ 3, 4, 6, 5, 14, 7, 8, 999};
 
 	std::vector<int> output;
-	for (auto i = 0; i < sizeof(input) / sizeof(int); ++i) {
+	for (int i = 0; i < sizeof(input) / sizeof(int); ++i) {
 		output.push_back(input[i]);
 	}
 	EXPECT_TRUE(expected_out == 1);
@@ -87,7 +87,7 @@ TEST(AlgoHW1, sort) {
 	std::vector<int> check{ 1, 3, 4, 5, 6, 7, 8, 14 };
 
 	std::vector<int> output;
-	for (auto i = 0; i < sizeof(input) / sizeof(int); ++i) {
+	for (int i = 0; i < sizeof(input) / sizeof(int); ++i) {
 		output.push_back(input[i]);
 	}
 
@@ -101,7 +101,7 @@ TEST(AlgoHW1, decrease) {
 	std::vector<int> check{ 0, 1, 3, 4, 14, 6, 8, 7 };
 
 	std::vector<int> output;
-	for (auto i = 0; i < sizeof(input) / sizeof(int); ++i) {
+	for (int i = 0; i < sizeof(input) / sizeof(int); ++i) {
 		output.push_back(input[i]);
 	}
 
@@ -122,5 +122,3 @@ int main(int argc, char **argv) {
 	system("pause");
 
 }
-
-

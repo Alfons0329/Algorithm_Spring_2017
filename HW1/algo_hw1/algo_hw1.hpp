@@ -4,7 +4,8 @@
 //
 //
 //all use zero base, it is troublesome while changing between 0 and 1 base
-#include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
 static const char* student_id = "0416324" ;
 using namespace std;
 //for printing data and debugging
@@ -96,12 +97,26 @@ void min_heap_extract(int * input_heap, int size, int * output_key)
 	//      input : { 1, 4, 3, 5, 14, 6, 8 ,7} , 8, &output_key
 	//   expected : { 3, 4, 6, 5, 14, 7, 8, 999} ,output_key == 1
     //new root is 1, so heapify from the leaves till 1
-    *output_key=input_heap[0];
-    input_heap[0]=999;
-    //input_heap[size-1]=999;
+
+    //if  the given input is ACCIDENTALLY NOT A HEAP!!!!!!!!!!!!! XDDDDDDDDDDD
+    //A PREVENTION
     for(int i=(size)/2;i>=0;i--)
     {
         min_heapify(input_heap,size-1 /*0 base system*/,i);
+    }
+    //A PREVENTION IS ENDED LMAO
+
+
+
+
+
+    *output_key=input_heap[0];
+    swap(input_heap[0],input_heap[size-1]);
+    input_heap[size-1]=999;
+    //input_heap[size-1]=999;
+    for(int i=(size)/2;i>=0;i--)
+    {
+        min_heapify(input_heap,size-2 /*0 base system 999 as boundary*/,i);
     }
 }
 
@@ -117,6 +132,16 @@ void min_heap_sort(int* input_heap, int size)
 	//      input : { 1, 4, 3, 5, 14, 6, 8 ,7} ,8
 	//   expected : { 1, 3, 4, 5, 6, 7, 8, 14}
     int t_size=size;
+
+    //if  the given input is ACCIDENTALLY NOT A HEAP!!!!!!!!!!!!! XDDDDDDDDDDD
+    //A PREVENTION
+    for(int i=(size)/2;i>=0;i--)
+    {
+        min_heapify(input_heap,size-1 /*0 base system*/,i);
+    }
+    //A PREVENTION IS ENDED LMAO
+
+
     for(int j=0;t_size>=1;j++)
     {
         swap(input_heap[0],input_heap[t_size-1]);//take the last element and re-min_heapify
@@ -127,6 +152,7 @@ void min_heap_sort(int* input_heap, int size)
     {
         swap(input_heap[i],input_heap[size-i-1]);
     }
+
 }
 
 
@@ -146,4 +172,3 @@ void min_heap_decrease_key(int * input_heap, int size, int position, int decreas
     }
 }
 //for self_debugging
-

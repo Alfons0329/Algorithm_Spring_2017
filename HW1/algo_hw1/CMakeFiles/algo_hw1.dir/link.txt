@@ -1,0 +1,1 @@
+/usr/bin/c++     -I/usr/local/include -Wall   -L/usr/local/lib CMakeFiles/algo_hw1.dir/main.cpp.o  -o algo_hw1 

@@ -1,0 +1,3 @@
+/home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/CMakeFiles/edit_cache.dir
+/home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/CMakeFiles/rebuild_cache.dir
+/home/alfonsubuntu/桌面/programming/Algorithm_Spring_2017/HW1/algo_hw1/CMakeFiles/algo_hw1.dir
