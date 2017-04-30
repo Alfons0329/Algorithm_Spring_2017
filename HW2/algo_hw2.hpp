@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <stack>
+#include <queue>
 using namespace std;
 static const char* student_id = "0416324" ;
 
@@ -42,7 +44,7 @@ class node
 {
 public:
     int data;
-    int color; // for color: 0: Red, 1: Black
+    int color; // for color: 0: black, 1: red
     node* left_ch;
     node* right_ch;
     node* parent;
@@ -67,7 +69,7 @@ public:
     RBT()
     {
         nil = new node; //give nil a space
-        nil->color = 1; //nil is black
+        nil->color = 0; //nil is black
         root=nil //the very first situation
         root->parent=nil; //the very first situation
     }
@@ -131,11 +133,11 @@ void RBT::RightRotation(node *x) //x is the rotation point current in
 }
 void RBT::RBTInsert(int key_in)
 {
-    node* y = neel;
+    node* y = nil;
     node* x = root;
     node* insert_node = new node;
 
-    while (x != neel)
+    while (x != nil)
     {
         y = x;
         if (insert_node->key < x->key)
@@ -150,7 +152,7 @@ void RBT::RBTInsert(int key_in)
 
     insert_node->parent = y;
 
-    if (y == neel)
+    if (y == nil)
     {
         this->root = insert_node;
     }
@@ -164,26 +166,26 @@ void RBT::RBTInsert(int key_in)
 
     //set the newly inserted node's properties
     insert_node->data = key_in;
-    insert_node->left_ch = neel;
-    insert_node->right_ch = neel;
-    insert_node->color = 0;
+    insert_node->left_ch = nil;
+    insert_node->right_ch = nil;
+    insert_node->color = 1;
     //the upper part is just the normal BST insertion
-    InsertFixedUpRBT(insert_node);
+    RBTInsertFixUp(insert_node);
 }
 void RBT::RBTInsertFixUp(node *current)
 {
-    while(current->parent->color==0) //if parent is red go loop
+    while(current->parent->color==1) //if parent is red go loop
     {
         //block one, parent is at grandparent's left_ch
         if(current->parent=current->parent->parent->left_ch)
         {
             node* uncle = current->parent->parent->right_ch;
             //case1 uncle is red
-            if(uncle->color==0)
+            if(uncle->color==1)
             {
-                current->parent->color=1; //bubble up the black color
-                uncle->color=1;
-                curent->parent->parent=0;
+                current->parent->color=0; //bubble up the black color
+                uncle->color=0;
+                curent->parent->parent=1;
                 current=curent->parent->parent;
             }
             //case 2 3 uncle is black , and 2 kinds of rotation
@@ -195,8 +197,8 @@ void RBT::RBTInsertFixUp(node *current)
                     LeftRotation(current); //swap to left side and same as case 3
                 }
                 //case 3
-                current->parent->color=1;
-                current->parent->parent->color=0;
+                current->parent->color=0;
+                current->parent->parent->color=1;
                 RightRotation(current->parent->parent);
             }
         }
@@ -205,11 +207,11 @@ void RBT::RBTInsertFixUp(node *current)
         {
             node* uncle = current->parent->parent->left_ch;
             //case1 uncle is red
-            if(uncle->color==0)
+            if(uncle->color==1)
             {
-                current->parent->color=1; //bubble up the black color
-                uncle->color=1;
-                curent->parent->parent=0;
+                current->parent->color=0; //bubble up the black color
+                uncle->color=0;
+                curent->parent->parent=1;
                 current=curent->parent->parent;
             }
             //case 2 3 uncle is black , and 2 kinds of rotation
@@ -221,14 +223,18 @@ void RBT::RBTInsertFixUp(node *current)
                     RightRotation(current); //swap to right side and same as case 3
                 }
                 //case 3
-                current->parent->color=1;
-                current->parent->parent->color=0;
+                current->parent->color=0;
+                current->parent->parent->color=1;
                 LeftRotation(current->parent->parent);
             }
         }
     }
 }
-void RBT::RBTDeleteFixUp(node *current)
+void RBT::RBTDeleteFixUp(node* current)
+{
+    
+}
+void RBT::RBTDeleteFixUp(node* current)
 {
 
 
@@ -245,7 +251,39 @@ node* RBT::Leftmost(node *current)
 void Insert(int * tree, int key)
 {
     RBT RBTree;
+    for(int i=0;i<tree[0];i++) //build the tree from a given array's data
+    {
+        if((i+1)%3==0)
+        {
+            RBTree.RBTInsert(tree[i]);
+        }
+    }
     RBTree.RBTInsert(key);
+
+    //write back to the given array using level order traversal
+    unsigned int bundle_index=1;
+    node* current=RBTree.root;
+    queue<node* > bfs_q;
+    q.push(current);
+    while(q.size())
+    {
+        current=q.front();
+        q.pop();
+        tree[bundle_index]=current->color;
+        if(current=nil)
+        {
+            tree[bundle_index+1]=0;
+        }
+        else if(current=NULL)
+        {
+            tree[bundle_index+1]=-1
+        }
+        else
+        {
+            tree[bundle_index+1]=current->data;
+        }
+        bundle_index+=3;
+    }
 }
 
 void Delete(int * tree, int key)
