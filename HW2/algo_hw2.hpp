@@ -1,5 +1,9 @@
 
 // change this to your id
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
 static const char* student_id = "0416324" ;
 
 
@@ -36,17 +40,212 @@ int Rank(int *, int);
 //
 class node
 {
+public:
     int data;
-    int color;
-    node left_ch;
-    node right_ch;
-    node parent;
+    int color; // for color: 0: Red, 1: Black
+    node* left_ch;
+    node* right_ch;
+    node* parent;
     bool isnil;
+
+}
+class RBT
+{
+public:
+    node* root;
+    node* nil;
+
+    void LeftRotation(node *x);
+    void RightRotation(node *x);
+    void RBTInsert(int key_in);
+    void RBTInsertFixUp(node* current);
+    void RBTDelete(int key_in);
+    void RBTDeleteFixUp(node* current);
+    node* Successor(node* current);
+    node* Leftmost(node* curent);
+
+    RBT()
+    {
+        nil = new node; //give nil a space
+        nil->color = 1; //nil is black
+        root=nil //the very first situation
+        root->parent=nil; //the very first situation
+    }
+
+}
+
+void RBT::LeftRotation(node *x) //x is the rotation point current in
+{
+    node *y = x->right_ch;  //locate position
+
+    x->right_ch = y->left_ch; //reconnection
+    if (y->left_ch != nil)
+    {
+        y->left_ch->parent = x;
+    }
+
+    y->parent = x->parent; //set the parent for rotation
+
+    if (x->parent == nil)//if root
+    {
+        root = y; //then root will be y
+    }
+    else if (x == x->parent->left_ch) //reconnection for parent-child relationship
+    {
+        x->parent->left_ch = y;
+    }
+    else //reconnection for parent-child relationship
+    {
+        x->parent->right_ch = y;
+    }
+    y->left_ch = x;//reconnection for parent-child relationship
+    x->parent = y;//reconnection for parent-child relationship
+}
+//mirror to RightRotation
+void RBT::RightRotation(node *x) //x is the rotation point current in
+{
+    node *y = x->left_ch;  //locate position
+
+    x->left_ch = y->right_ch; //reconnection
+    if (y->right_ch != nil)
+    {
+        y->right_ch->parent = x;
+    }
+
+    y->parent = x->parent; //set the parent for rotation
+
+    if (x->parent == nil)//if root
+    {
+        root = y; //then root will be y
+    }
+    else if (x == x->parent->right_ch) //reconnection for parent-child relationship
+    {
+        x->parent->right_ch = y;
+    }
+    else //reconnection for parent-child relationship
+    {
+        x->parent->left_ch = y;
+    }
+    y->right_ch = x;//reconnection for parent-child relationship
+    x->parent = y;//reconnection for parent-child relationship
+}
+void RBT::RBTInsert(int key_in)
+{
+    node* y = neel;
+    node* x = root;
+    node* insert_node = new node;
+
+    while (x != neel)
+    {
+        y = x;
+        if (insert_node->key < x->key)
+        {
+            x = x->left_ch;
+        }
+        else
+        {
+            x = x->right_ch;
+        }
+    }
+
+    insert_node->parent = y;
+
+    if (y == neel)
+    {
+        this->root = insert_node;
+    }
+    else if (insert_node->key < y->key)
+    {
+        y->left_ch = insert_node;
+    }
+    else{
+        y->right_ch = insert_node;
+    }
+
+    //set the newly inserted node's properties
+    insert_node->data = key_in;
+    insert_node->left_ch = neel;
+    insert_node->right_ch = neel;
+    insert_node->color = 0;
+    //the upper part is just the normal BST insertion
+    InsertFixedUpRBT(insert_node);
+}
+void RBT::RBTInsertFixUp(node *current)
+{
+    while(current->parent->color==0) //if parent is red go loop
+    {
+        //block one, parent is at grandparent's left_ch
+        if(current->parent=current->parent->parent->left_ch)
+        {
+            node* uncle = current->parent->parent->right_ch;
+            //case1 uncle is red
+            if(uncle->color==0)
+            {
+                current->parent->color=1; //bubble up the black color
+                uncle->color=1;
+                curent->parent->parent=0;
+                current=curent->parent->parent;
+            }
+            //case 2 3 uncle is black , and 2 kinds of rotation
+            else
+            {
+                if(curent=current->parent->right_ch)//case 2 (actually tuen into case 3)
+                {
+                    current=current->parent;
+                    LeftRotation(current); //swap to left side and same as case 3
+                }
+                //case 3
+                current->parent->color=1;
+                current->parent->parent->color=0;
+                RightRotation(current->parent->parent);
+            }
+        }
+        //block two symmetric to top, parent is at grandparent's right_ch;
+        else
+        {
+            node* uncle = current->parent->parent->left_ch;
+            //case1 uncle is red
+            if(uncle->color==0)
+            {
+                current->parent->color=1; //bubble up the black color
+                uncle->color=1;
+                curent->parent->parent=0;
+                current=curent->parent->parent;
+            }
+            //case 2 3 uncle is black , and 2 kinds of rotation
+            else
+            {
+                if(curent=current->parent->left_ch)//case 2 (actually tuen into case 3)
+                {
+                    current=current->parent;
+                    RightRotation(current); //swap to right side and same as case 3
+                }
+                //case 3
+                current->parent->color=1;
+                current->parent->parent->color=0;
+                LeftRotation(current->parent->parent);
+            }
+        }
+    }
+}
+void RBT::RBTDeleteFixUp(node *current)
+{
+
+
+}
+node* RBT::Successor(node *current)
+{
+
+}
+node* RBT::Leftmost(node *current)
+{
+
 
 }
 void Insert(int * tree, int key)
 {
-
+    RBT RBTree;
+    RBTree.RBTInsert(key);
 }
 
 void Delete(int * tree, int key)
