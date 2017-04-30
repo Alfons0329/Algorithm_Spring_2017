@@ -1,6 +1,6 @@
 
 // change this to your id
-static const char* student_id = "3345678" ;
+static const char* student_id = "0416324" ;
 
 
 // do not edit prototype
@@ -9,7 +9,7 @@ void Delete(int *, int);
 int Select(int *, int);
 int Rank(int *, int);
 
-// data structure : 
+// data structure :
 // tree is an array with enough space
 // tree[0] is the array size
 // bundle three attribute as a node data
@@ -34,25 +34,39 @@ int Rank(int *, int);
 //
 // do your homework here
 //
+class node
+{
+    int data;
+    int color;
+    node left_ch;
+    node right_ch;
+    node parent;
+    bool isnil;
 
-void Insert(int * tree, int key) {
+}
+void Insert(int * tree, int key)
+{
 
 }
 
-void Delete(int * tree, int key) {
+void Delete(int * tree, int key)
+{
 	//
 	// if there is ambiguous situation, choose the smaller or left one
 	//
 
 }
 
-int Select(int * tree, int i) {
+int Select(int * tree, int i)
+{
 	// use Dynamic Order Statistics to tell me the i'th smallest element
 	int output_key;
 	return output_key;
 }
 
-int Rank(int * tree, int x) {
+int Rank(int * tree, int x)
+{
+
 	// use Dynamic Order Statistics to tell me the rank of element x in the tree
 	int output_rank;
 	return output_rank;
