@@ -357,9 +357,10 @@ void Delete(int * tree, int key)
         //delete_node->element = y->element;
     }
 
-    if (to_be_deleted->color == 1)
-    {                   // 若刪除的node是黑色, 要從to_be_deleted_child進行修正, 以符合RBT的顏色規則
-        DeleteFixedUpRBT(to_be_deleted_child);
+    if (to_be_deleted->color == 0)
+    {
+        DeleteFixedUpRBT(to_be_deleted_child); //if the node deleted is black ,then fix it from
+        //fix up from its child
     }
     delete to_be_deleted;
 
