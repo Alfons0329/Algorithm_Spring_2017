@@ -12,7 +12,7 @@ static const char* student_id = "0416324" ;
 // do not edit prototype
 void Insert(int *, int);
 void Delete(int *, int);
-int Select(int *, int);
+int Select(int *, int;
 int Rank(int *, int);
 
 // data structure :
@@ -50,7 +50,7 @@ public:
     node* parent;
     bool isnil;
 
-}
+};
 class RBT
 {
 public:
@@ -63,8 +63,9 @@ public:
     void RBTInsertFixUp(node* current);
     void RBTDelete(int key_in);
     void RBTDeleteFixUp(node* current);
-    node* Successor(node* current);
+    node* Predecessor(node* current);
     node* Leftmost(node* curent);
+    node* Search(int key_in);
 
     RBT()
     {
@@ -74,7 +75,7 @@ public:
         root->parent=nil; //the very first situation
     }
 
-}
+};
 
 void RBT::LeftRotation(node *x) //x is the rotation point current in
 {
@@ -202,7 +203,7 @@ void RBT::RBTInsertFixUp(node *current)
                 RightRotation(current->parent->parent);
             }
         }
-        //block two symmetric to top, parent is at grandparent's right_ch;
+        //block two symmetric to阿 top, parent is at grandparent's right_ch;
         else
         {
             node* uncle = current->parent->parent->left_ch;
@@ -232,14 +233,9 @@ void RBT::RBTInsertFixUp(node *current)
 }
 void RBT::RBTDeleteFixUp(node* current)
 {
-    
-}
-void RBT::RBTDeleteFixUp(node* current)
-{
-
 
 }
-node* RBT::Successor(node *current)
+node* RBT::Predecessor(node *current)
 {
 
 }
@@ -247,6 +243,23 @@ node* RBT::Leftmost(node *current)
 {
 
 
+}
+node* Search(int key_in)
+{
+        node* current = root;
+
+        while(current!=NULL && key_in != current->data)
+        {
+            if (KEY < current->data)
+            {
+                current = current->leftchild;   // 向左走
+            }
+            else
+            {
+                current = current->rightchild;  // 向右走
+            }
+        }
+        return current;
 }
 void Insert(int * tree, int key)
 {
@@ -291,10 +304,57 @@ void Delete(int * tree, int key)
 	//
 	// if there is ambiguous situation, choose the smaller or left one
 	//
+    //search the key first
+    node* delete_node = Search(key);    
+
+    if (delete_node == NULL)
+    {
+        std::cout << "data not found.\n";
+        return;
+    }
+
+    node* to_be_deleted = 0;     // to_be_deleted Real node to be deleted
+    node* to_be_deleted_child = 0;     //to_be_deleted_child to be deleted's child
+
+    if (delete_node->leftchild == neel || delete_node->rightchild == neel)
+    {
+        to_be_deleted = delete_node;
+    }
+    else   //2 child case turn to 1 thild, assign its data and delete its Predecessor
+    {
+        to_be_deleted = Predecessor(delete_node);
+    }
+    if (to_be_deleted->leftchild != neel){              // 將to_be_deleted_child設成to_be_deleted的child, 可能有實際資料, 也有可能是NIL
+        to_be_deleted_child = to_be_deleted->leftchild;
+    }
+    else{
+        to_be_deleted_child = to_be_deleted->rightchild;
+    }
+
+    to_be_deleted_child->parent = to_be_deleted->parent;                 // 即使to_be_deleted_child是NIL也要把to_be_deleted_child的parent指向有效的記憶體位置
+                                           // 因為在Fito_be_deleted_childUp時需要藉由to_be_deleted_child->parent判斷to_be_deleted_child為leftchild或是rightchild
+
+    if (to_be_deleted->parent == neel){                // 接著再把要被釋放記憶體的node之"parent"指向新的child
+        this->root = to_be_deleted_child;                    // 若刪除的是原先的root, 就把to_be_deleted_child當成新的root
+    }
+    else if (to_be_deleted == to_be_deleted->parent->leftchild){   // 若to_be_deleted原本是其parent之left child
+        to_be_deleted->parent->leftchild = to_be_deleted_child;          // 便把to_be_deleted_child皆在to_be_deleted的parent的left child, 取代to_be_deleted
+    }
+    else{                                  // 若to_be_deleted原本是其parent之right child
+        to_be_deleted->parent->rightchild = to_be_deleted_child;         // 便把to_be_deleted_child皆在to_be_deleted的parent的right child, 取代to_be_deleted
+    }
+
+    if (to_be_deleted != delete_node) {                // 針對case3
+        delete_node->data = to_be_deleted->data;         // 若y是delete_node的替身, 最後要再將y的資料
+        //delete_node->element = y->element; // 放回delete_node的記憶體位置, 並將y的記憶體位置釋放
+    }
+
+    if (to_be_deleted->color == 1) {                   // 若刪除的node是黑色, 要從to_be_deleted_child進行修正, 以符合RBT的顏色規則
+        DeleteFixedUpRBT(to_be_deleted_child);
 
 }
 
-int Select(int * tree, int i)
+int Select(int * tree, int i) //from the samllest to count
 {
 	// use Dynamic Order Statistics to tell me the i'th smallest element
 	int output_key;
