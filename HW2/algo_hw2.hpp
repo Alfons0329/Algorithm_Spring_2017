@@ -305,18 +305,17 @@ void Delete(int * tree, int key)
 	// if there is ambiguous situation, choose the smaller or left one
 	//
     //search the key first
-    node* delete_node = Search(key);    
+    node* delete_node = Search(key);
 
     if (delete_node == NULL)
     {
         std::cout << "data not found.\n";
         return;
     }
+    node* to_be_deleted = NULL;
+    node* to_be_deleted_child = NULL;     //to_be_deleted_child to be deleted's child
 
-    node* to_be_deleted = 0;     // to_be_deleted Real node to be deleted
-    node* to_be_deleted_child = 0;     //to_be_deleted_child to be deleted's child
-
-    if (delete_node->leftchild == neel || delete_node->rightchild == neel)
+    if (delete_node->leftchild == nil || delete_node->rightchild == nil) //not the 2 children case
     {
         to_be_deleted = delete_node;
     }
@@ -324,33 +323,45 @@ void Delete(int * tree, int key)
     {
         to_be_deleted = Predecessor(delete_node);
     }
-    if (to_be_deleted->leftchild != neel){              // 將to_be_deleted_child設成to_be_deleted的child, 可能有實際資料, 也有可能是NIL
+
+
+    if (to_be_deleted->leftchild != nil)
+    {
+        //set the connectivity
         to_be_deleted_child = to_be_deleted->leftchild;
     }
-    else{
+    else
+    {
         to_be_deleted_child = to_be_deleted->rightchild;
     }
 
-    to_be_deleted_child->parent = to_be_deleted->parent;                 // 即使to_be_deleted_child是NIL也要把to_be_deleted_child的parent指向有效的記憶體位置
-                                           // 因為在Fito_be_deleted_childUp時需要藉由to_be_deleted_child->parent判斷to_be_deleted_child為leftchild或是rightchild
 
-    if (to_be_deleted->parent == neel){                // 接著再把要被釋放記憶體的node之"parent"指向新的child
-        this->root = to_be_deleted_child;                    // 若刪除的是原先的root, 就把to_be_deleted_child當成新的root
-    }
-    else if (to_be_deleted == to_be_deleted->parent->leftchild){   // 若to_be_deleted原本是其parent之left child
-        to_be_deleted->parent->leftchild = to_be_deleted_child;          // 便把to_be_deleted_child皆在to_be_deleted的parent的left child, 取代to_be_deleted
-    }
-    else{                                  // 若to_be_deleted原本是其parent之right child
-        to_be_deleted->parent->rightchild = to_be_deleted_child;         // 便把to_be_deleted_child皆在to_be_deleted的parent的right child, 取代to_be_deleted
-    }
+    to_be_deleted_child->parent = to_be_deleted->parent;//re-connection
 
-    if (to_be_deleted != delete_node) {                // 針對case3
-        delete_node->data = to_be_deleted->data;         // 若y是delete_node的替身, 最後要再將y的資料
-        //delete_node->element = y->element; // 放回delete_node的記憶體位置, 並將y的記憶體位置釋放
+    if (to_be_deleted->parent == nil)  //if to_be_deleted is the root then set the root as to_be_deleted_child
+    {
+        this->root = to_be_deleted_child;
+    }
+    else if (to_be_deleted == to_be_deleted->parent->leftchild)
+    {
+        to_be_deleted->parent->leftchild = to_be_deleted_child; //connectivity of to_be_deleted_parent's leftchild
+    }
+    else
+    {
+        to_be_deleted->parent->rightchild = to_be_deleted_child; //connectivity of to_be_deleted_parent's rightchild
     }
 
-    if (to_be_deleted->color == 1) {                   // 若刪除的node是黑色, 要從to_be_deleted_child進行修正, 以符合RBT的顏色規則
+    if (to_be_deleted != delete_node)
+    {
+        delete_node->data = to_be_deleted->data;         // overwrite the two child's case
+        //delete_node->element = y->element;
+    }
+
+    if (to_be_deleted->color == 1)
+    {                   // 若刪除的node是黑色, 要從to_be_deleted_child進行修正, 以符合RBT的顏色規則
         DeleteFixedUpRBT(to_be_deleted_child);
+    }
+    delete to_be_deleted;
 
 }
 
