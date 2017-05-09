@@ -203,7 +203,7 @@ void RBT::RBTInsertFixUp(node *current)
                 RightRotation(current->parent->parent);
             }
         }
-        //block two symmetric to阿 top, parent is at grandparent's right_ch;
+        //block two symmetric to top, parent is at grandparent's right_ch;
         else
         {
             node* uncle = current->parent->parent->left_ch;
@@ -252,11 +252,11 @@ node* Search(int key_in)
         {
             if (KEY < current->data)
             {
-                current = current->leftchild;   // 向左走
+                current = current->leftchild;   // go l
             }
             else
             {
-                current = current->rightchild;  // 向右走
+                current = current->rightchild;  // go r
             }
         }
         return current;
@@ -283,17 +283,26 @@ void Insert(int * tree, int key)
         current=q.front();
         q.pop();
         tree[bundle_index]=current->color;
+        if(current->left_ch!=NULL)
+            q.push(current->left_ch);
+        if(current->right_ch!=NULL)
+            q.push(current->right_ch);
+
+
         if(current=nil)
         {
             tree[bundle_index+1]=0;
+            tree[bundle_index+2]=0;
         }
         else if(current=NULL)
         {
-            tree[bundle_index+1]=-1
+            tree[bundle_index+1]=-1;
+            tree[bundle_index+1]=-1;
         }
         else
         {
-            tree[bundle_index+1]=current->data;
+            tree[bundle_index+1]=curent->color;
+            tree[bundle_index+2]=current->data;
         }
         bundle_index+=3;
     }
