@@ -49,6 +49,7 @@ public:
     node* right_ch;
     node* parent;
     bool isnil;
+    node():left_ch(0),right_ch(0),parent(0),data(0),color(0){};
 
 };
 class RBT
@@ -138,11 +139,11 @@ void RBT::RBTInsert(int key_in)
     node* y = nil;
     node* x = root;
     node* insert_node = new node;
-
+    insert_node->data = key_in;
     while (x != nil)
     {
         y = x;
-        if (insert_node->data < x->data)
+        if (insert_node->data <= x->data)
         {
             x = x->left_ch;
         }
@@ -156,9 +157,9 @@ void RBT::RBTInsert(int key_in)
 
     if (y == nil)
     {
-        this->root = insert_node;
+        root = insert_node;
     }
-    else if (insert_node->data < y->data)
+    else if (insert_node->data <= y->data)
     {
         y->left_ch = insert_node;
     }
@@ -167,7 +168,7 @@ void RBT::RBTInsert(int key_in)
     }
 
     //set the newly inserted node's properties
-    insert_node->data = key_in;
+
     insert_node->left_ch = nil;
     insert_node->right_ch = nil;
     insert_node->color = 1;
@@ -179,7 +180,7 @@ void RBT::RBTInsertFixUp(node *current)
     while(current->parent->color==1) //if parent is red go loop
     {
         //block one, parent is at grandparent's left_ch
-        if(current->parent=current->parent->parent->left_ch)
+        if(current->parent==current->parent->parent->left_ch)
         {
             node* uncle = current->parent->parent->right_ch;
             //case1 uncle is red
@@ -193,7 +194,7 @@ void RBT::RBTInsertFixUp(node *current)
             //case 2 3 uncle is black , and 2 kinds of rotation
             else
             {
-                if(current=current->parent->right_ch)//case 2 (actually tuen into case 3)
+                if(current==current->parent->right_ch)//case 2 (actually tuen into case 3)
                 {
                     current=current->parent;
                     LeftRotation(current); //swap to left side and same as case 3
@@ -219,7 +220,7 @@ void RBT::RBTInsertFixUp(node *current)
             //case 2 3 uncle is black , and 2 kinds of rotation
             else
             {
-                if(current=current->parent->left_ch)//case 2 (actually tuen into case 3)
+                if(current==current->parent->left_ch)//case 2 (actually tuen into case 3)
                 {
                     current=current->parent;
                     RightRotation(current); //swap to right side and same as case 3
@@ -231,6 +232,7 @@ void RBT::RBTInsertFixUp(node *current)
             }
         }
     }
+    root->color=0;
 }
 // for color: 0: black, 1: red
 void RBT::RBTDeleteFixUp(node* current)
@@ -321,14 +323,16 @@ node* RBT::Search(int key_in)
         }
         return current;
 }
-void Insert(int * tree, int key)
+void Insert(int* tree, int key)
 {
 
     RBT RBTree;
-    for(int i=0;i<tree[0];i++) //build the tree from a given array's data
+    for(int i=2;i<tree[0];i+=3) //build the tree from a given array's data
     {
-        if((i+1)%3==0/*&&tree[i]!=-1&&tree[i]!=0*/)
+       //cout<<"I is now "<<i<<endl;
+        if(tree[i]!=-1&&tree[i]!=0)
         {
+            cout<<"\nInserting "<<tree[i]<<endl;
             RBTree.RBTInsert(tree[i]);
         }
     }
@@ -382,7 +386,7 @@ void Delete(int * tree, int key)
     {
         if((i+1)%3==0&&tree[i]!=-1&&tree[i]!=0)
         {
-            RBTree.RBTInsert(tree[i],-999);
+            RBTree.RBTInsert(tree[i]);
         }
     }
 
