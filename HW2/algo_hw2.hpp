@@ -231,8 +231,39 @@ void RBT::RBTInsertFixUp(node *current)
         }
     }
 }
+// for color: 0: black, 1: red
 void RBT::RBTDeleteFixUp(node* current)
 {
+    if(current->color==1) //if current to fix is red, mark it as black
+    {
+        current->color=0;
+    }
+    if(current->parent==nil) //if current to fix is root, mark it as black
+    {
+        current->color=0;
+    }
+    //case 1, the sibling is red
+    while(current != root &&current->color==0)
+    {
+        if (current == current->parent->leftchild)
+        {
+            node *sibling = current->parent->rightchild;
+            // Case1: Iif sibling  is red
+            if (sibling->color == 0)
+            {
+                sibling->color = 1;
+                current->parent->color = 0;
+                LeftRotation(current->parent);
+                sibling = current->parent->rightchild;
+            }
+            // Case2、3、4: sibling is black
+            // Case2: sibling's 2 child are all black node
+        }
+    }
+
+
+
+
 
 }
 node* RBT::Predecessor(node *current)
@@ -291,18 +322,18 @@ void Insert(int * tree, int key)
 
         if(current=nil)
         {
+            tree[bundle_index+0]=0;
             tree[bundle_index+1]=0;
-            tree[bundle_index+2]=0;
         }
         else if(current=NULL)
         {
-            tree[bundle_index+1]=-1;
+            tree[bundle_index+0]=-1;
             tree[bundle_index+1]=-1;
         }
         else
         {
-            tree[bundle_index+1]=curent->color;
-            tree[bundle_index+2]=current->data;
+            tree[bundle_index+0]=curent->color;
+            tree[bundle_index+1]=current->data;
         }
         bundle_index+=3;
     }
