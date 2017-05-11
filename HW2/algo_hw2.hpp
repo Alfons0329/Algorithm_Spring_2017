@@ -245,17 +245,16 @@ void RBT::RBTDeleteFixUp(node* current)
     {
         current->color=0;
     }
-    //case 1, the sibling is red
     while(current != root &&current->color==0)
     {
         if (current == current->parent->left_ch)
         {
             node *sibling = current->parent->right_ch;
             // Case1: Iif sibling  is red
-            if (sibling->color == 0)
+            if (sibling->color == 1)
             {
-                sibling->color = 1;
-                current->parent->color = 0;
+                sibling->color = 0;
+                current->parent->color = 1;
                 LeftRotation(current->parent);
                 sibling = current->parent->right_ch;
             }
@@ -284,6 +283,10 @@ void RBT::RBTDeleteFixUp(node* current)
                 LeftRotation(current->parent);
                 current = root;     // After to root, jump out the loop
             }
+        }
+        else
+        {
+            
         }
     }
 }
