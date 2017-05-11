@@ -25,22 +25,21 @@ int main()
     cout<<"Tree insertion now.....: "<<"Test array size "<<test_array.size();
     for(int i=0;i<test_array.size();i++)
     {
-        cout<<"\n i is now "<<i;
-        printf("Test arrar [i] %d\n",test_array[i]);
         test_array_ptr[i]=test_array[i];
-        cout<<"\n i is now "<<i;
         if((i+1)%3==0)
         {
             cout<<" Inserting: "<<test_array[i];
             Insert(test_array_ptr,-999);
+
+            cout<<"\nTest array after insertion result: ";
+            for(int i=0;i<test_array.size();i++)
+            {
+                cout<<test_array_ptr[i]<<" ";
+            }
         }
-        cout<<"\nTest array after insertion result: ";
-        for(int i=0;i<test_array.size();i++)
-        {
-            cout<<test_array_ptr[i]<<" ";
-        }
+
     }
-    cout<<"\nTest array after insertion result: ";
+    cout<<"\nTest array after insertion DONE FOR ALL result: ";
     for(int i=0;i<test_array.size();i++)
     {
         cout<<test_array_ptr[i]<<" ";
