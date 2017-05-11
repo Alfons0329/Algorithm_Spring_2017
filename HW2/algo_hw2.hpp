@@ -63,8 +63,9 @@ public:
     void RBTInsertFixUp(node* current);
     void RBTDelete(int key_in);
     void RBTDeleteFixUp(node* current);
+    bool IsEmptyTree();
     node* Predecessor(node* current);
-    node* Leftmost(node* curent);
+    node* Rightmost(node* curent);
     node* Search(int key_in);
 
     RBT()
@@ -245,35 +246,63 @@ void RBT::RBTDeleteFixUp(node* current)
     //case 1, the sibling is red
     while(current != root &&current->color==0)
     {
-        if (current == current->parent->leftchild)
+        if (current == current->parent->left_ch)
         {
-            node *sibling = current->parent->rightchild;
+            node *sibling = current->parent->right_ch;
             // Case1: Iif sibling  is red
             if (sibling->color == 0)
             {
                 sibling->color = 1;
                 current->parent->color = 0;
                 LeftRotation(current->parent);
-                sibling = current->parent->rightchild;
+                sibling = current->parent->right_ch;
             }
             // Case2、3、4: sibling is black
             // Case2: sibling's 2 child are all black node
+            if (sibling->left_ch->color == 0 && sibling->right_ch->color == 0)
+            {
+                sibling->color = 1;
+                current = current->parent;           // if update till root,than exit the loop
+            }
+            else //case 3 4 ,only on of the child of the sibling is black
+            {
+                //case3: siblinf's right child is black
+                if (sibling->right_ch->color == 0)
+                {
+                    sibling->left_ch->color = 0;
+                    sibling->color = 1;
+                    RightRotation(sibling);
+                    sibling = current->parent->right_ch;
+                }
+                // After case3 will become case 4
+                // Case 4: sibling's right child is red, left childis black
+                sibling->color = current->parent->color;
+                current->parent->color = 0;
+                sibling->right_ch->color = 0;
+                LeftRotation(current->parent);
+                current = root;     // After to root, jump out the loop
+            }
         }
     }
-
-
-
-
-
+}
+bool RBT::IsEmptyTree()
+{
+    return (this->root==this->nil) ? 1 : 0;
 }
 node* RBT::Predecessor(node *current)
 {
-
+    if (current->right_ch != NULL)
+    {
+        return Rightmost(current->right_ch);
+    }
 }
-node* RBT::Leftmost(node *current)
+node* RBT::Rightmost(node *current)
 {
-
-
+    while(current->right_ch!=NULL)
+    {
+        current=current->right_ch;
+    }
+    return curent;
 }
 node* Search(int key_in)
 {
@@ -283,11 +312,11 @@ node* Search(int key_in)
         {
             if (KEY < current->data)
             {
-                current = current->leftchild;   // go l
+                current = current->left_ch;   // go l
             }
             else
             {
-                current = current->rightchild;  // go r
+                current = current->right_ch;  // go r
             }
         }
         return current;
@@ -295,9 +324,10 @@ node* Search(int key_in)
 void Insert(int * tree, int key)
 {
     RBT RBTree;
+
     for(int i=0;i<tree[0];i++) //build the tree from a given array's data
     {
-        if((i+1)%3==0)
+        if((i+1)%3==0&&tree[i]!=-1&&tree[i]!=0)
         {
             RBTree.RBTInsert(tree[i]);
         }
@@ -355,7 +385,7 @@ void Delete(int * tree, int key)
     node* to_be_deleted = NULL;
     node* to_be_deleted_child = NULL;     //to_be_deleted_child to be deleted's child
 
-    if (delete_node->leftchild == nil || delete_node->rightchild == nil) //not the 2 children case
+    if (delete_node->left_ch == nil || delete_node->right_ch == nil) //not the 2 children case
     {
         to_be_deleted = delete_node;
     }
@@ -365,14 +395,14 @@ void Delete(int * tree, int key)
     }
 
 
-    if (to_be_deleted->leftchild != nil)
+    if (to_be_deleted->left_ch != nil)
     {
         //set the connectivity
-        to_be_deleted_child = to_be_deleted->leftchild;
+        to_be_deleted_child = to_be_deleted->left_ch;
     }
     else
     {
-        to_be_deleted_child = to_be_deleted->rightchild;
+        to_be_deleted_child = to_be_deleted->right_ch;
     }
 
 
@@ -382,13 +412,13 @@ void Delete(int * tree, int key)
     {
         this->root = to_be_deleted_child;
     }
-    else if (to_be_deleted == to_be_deleted->parent->leftchild)
+    else if (to_be_deleted == to_be_deleted->parent->left_ch)
     {
-        to_be_deleted->parent->leftchild = to_be_deleted_child; //connectivity of to_be_deleted_parent's leftchild
+        to_be_deleted->parent->left_ch = to_be_deleted_child; //connectivity of to_be_deleted_parent's left_ch
     }
     else
     {
-        to_be_deleted->parent->rightchild = to_be_deleted_child; //connectivity of to_be_deleted_parent's rightchild
+        to_be_deleted->parent->right_ch = to_be_deleted_child; //connectivity of to_be_deleted_parent's right_ch
     }
 
     if (to_be_deleted != delete_node)
@@ -406,10 +436,20 @@ void Delete(int * tree, int key)
 
 }
 
-int Select(int * tree, int i) //from the samllest to count
+int Select(int * tree, int ith) //from the samllest to count
 {
 	// use Dynamic Order Statistics to tell me the i'th smallest element
 	int output_key;
+    vector<int> data_collection
+    for(int i=0;i<tree[0];i++)
+    {
+        if((i+1)%3==0)
+        {
+            data_collection.push_back(data[i]);
+        }
+    }
+    sort(data_collection.begin(),data_collection.end());
+    output_key=data_collection[ith];
 	return output_key;
 }
 
@@ -418,5 +458,6 @@ int Rank(int * tree, int x)
 
 	// use Dynamic Order Statistics to tell me the rank of element x in the tree
 	int output_rank;
+
 	return output_rank;
 }
