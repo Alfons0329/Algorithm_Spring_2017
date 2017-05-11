@@ -12,7 +12,7 @@ static const char* student_id = "0416324" ;
 // do not edit prototype
 void Insert(int *, int);
 void Delete(int *, int);
-int Select(int *, int;
+int Select(int *, int);
 int Rank(int *, int);
 
 // data structure :
@@ -65,14 +65,14 @@ public:
     void RBTDeleteFixUp(node* current);
     bool IsEmptyTree();
     node* Predecessor(node* current);
-    node* Rightmost(node* curent);
+    node* Rightmost(node* current);
     node* Search(int key_in);
 
     RBT()
     {
         nil = new node; //give nil a space
         nil->color = 0; //nil is black
-        root=nil //the very first situation
+        root=nil; //the very first situation
         root->parent=nil; //the very first situation
     }
 
@@ -142,7 +142,7 @@ void RBT::RBTInsert(int key_in)
     while (x != nil)
     {
         y = x;
-        if (insert_node->key < x->key)
+        if (insert_node->data < x->data)
         {
             x = x->left_ch;
         }
@@ -158,7 +158,7 @@ void RBT::RBTInsert(int key_in)
     {
         this->root = insert_node;
     }
-    else if (insert_node->key < y->key)
+    else if (insert_node->data < y->data)
     {
         y->left_ch = insert_node;
     }
@@ -187,13 +187,13 @@ void RBT::RBTInsertFixUp(node *current)
             {
                 current->parent->color=0; //bubble up the black color
                 uncle->color=0;
-                curent->parent->parent=1;
-                current=curent->parent->parent;
+                current->parent->parent->color=1;
+                current=current->parent->parent;
             }
             //case 2 3 uncle is black , and 2 kinds of rotation
             else
             {
-                if(curent=current->parent->right_ch)//case 2 (actually tuen into case 3)
+                if(current=current->parent->right_ch)//case 2 (actually tuen into case 3)
                 {
                     current=current->parent;
                     LeftRotation(current); //swap to left side and same as case 3
@@ -213,13 +213,13 @@ void RBT::RBTInsertFixUp(node *current)
             {
                 current->parent->color=0; //bubble up the black color
                 uncle->color=0;
-                curent->parent->parent=1;
-                current=curent->parent->parent;
+                current->parent->parent->color=1;
+                current=current->parent->parent;
             }
             //case 2 3 uncle is black , and 2 kinds of rotation
             else
             {
-                if(curent=current->parent->left_ch)//case 2 (actually tuen into case 3)
+                if(current=current->parent->left_ch)//case 2 (actually tuen into case 3)
                 {
                     current=current->parent;
                     RightRotation(current); //swap to right side and same as case 3
@@ -302,15 +302,15 @@ node* RBT::Rightmost(node *current)
     {
         current=current->right_ch;
     }
-    return curent;
+    return current;
 }
-node* Search(int key_in)
+node* RBT::Search(int key_in)
 {
         node* current = root;
 
         while(current!=NULL && key_in != current->data)
         {
-            if (KEY < current->data)
+            if (key_in < current->data)
             {
                 current = current->left_ch;   // go l
             }
@@ -323,8 +323,8 @@ node* Search(int key_in)
 }
 void Insert(int * tree, int key)
 {
-    RBT RBTree;
 
+    RBT RBTree;
     for(int i=0;i<tree[0];i++) //build the tree from a given array's data
     {
         if((i+1)%3==0/*&&tree[i]!=-1&&tree[i]!=0*/)
@@ -332,12 +332,13 @@ void Insert(int * tree, int key)
             RBTree.RBTInsert(tree[i]);
         }
     }
-    RBTree.RBTInsert(key);
+    if(key!=-999)//for self-debugging test
+        RBTree.RBTInsert(key);
 
     //write back to the given array using level order traversal
     unsigned int bundle_index=1;
     node* current=RBTree.root;
-    queue<node* > bfs_q;
+    queue<node* > q;
     q.push(current);
     while(q.size())
     {
@@ -350,19 +351,19 @@ void Insert(int * tree, int key)
             q.push(current->right_ch);
 
 
-        if(current=nil)
+        if(current==RBTree.nil)
         {
             tree[bundle_index+0]=0;
             tree[bundle_index+1]=0;
         }
-        else if(current=NULL)
+        else if(current==NULL)
         {
             tree[bundle_index+0]=-1;
             tree[bundle_index+1]=-1;
         }
         else
         {
-            tree[bundle_index+0]=curent->color;
+            tree[bundle_index+0]=current->color;
             tree[bundle_index+1]=current->data;
         }
         bundle_index+=3;
@@ -375,8 +376,17 @@ void Delete(int * tree, int key)
 	// if there is ambiguous situation, choose the smaller or left one
 	//
     //search the key first
-    node* delete_node = Search(key);
+    //tree reconstruction
+    RBT RBTree;
+    for(int i=0;i<tree[0];i++) //build the tree from a given array's data
+    {
+        if((i+1)%3==0&&tree[i]!=-1&&tree[i]!=0)
+        {
+            RBTree.RBTInsert(tree[i],-999);
+        }
+    }
 
+    node* delete_node = RBTree.Search(key);
     if (delete_node == NULL)
     {
         std::cout << "data not found.\n";
@@ -385,17 +395,17 @@ void Delete(int * tree, int key)
     node* to_be_deleted = NULL;
     node* to_be_deleted_child = NULL;     //to_be_deleted_child to be deleted's child
 
-    if (delete_node->left_ch == nil || delete_node->right_ch == nil) //not the 2 children case
+    if (delete_node->left_ch == RBTree.nil || delete_node->right_ch == RBTree.nil) //not the 2 children case
     {
         to_be_deleted = delete_node;
     }
     else   //2 child case turn to 1 thild, assign its data and delete its Predecessor
     {
-        to_be_deleted = Predecessor(delete_node);
+        to_be_deleted = RBTree.Predecessor(delete_node);
     }
 
 
-    if (to_be_deleted->left_ch != nil)
+    if (to_be_deleted->left_ch != RBTree.nil)
     {
         //set the connectivity
         to_be_deleted_child = to_be_deleted->left_ch;
@@ -408,9 +418,9 @@ void Delete(int * tree, int key)
 
     to_be_deleted_child->parent = to_be_deleted->parent;//re-connection
 
-    if (to_be_deleted->parent == nil)  //if to_be_deleted is the root then set the root as to_be_deleted_child
+    if (to_be_deleted->parent == RBTree.nil)  //if to_be_deleted is the root then set the root as to_be_deleted_child
     {
-        this->root = to_be_deleted_child;
+        RBTree.root = to_be_deleted_child;
     }
     else if (to_be_deleted == to_be_deleted->parent->left_ch)
     {
@@ -429,7 +439,7 @@ void Delete(int * tree, int key)
 
     if (to_be_deleted->color == 0)
     {
-        DeleteFixedUpRBT(to_be_deleted_child); //if the node deleted is black ,then fix it from
+        RBTree.RBTDeleteFixUp(to_be_deleted_child); //if the node deleted is black ,then fix it from
         //fix up from its child
     }
     delete to_be_deleted;
@@ -440,12 +450,12 @@ int Select(int * tree, int ith) //from the samllest to count
 {
 	// use Dynamic Order Statistics to tell me the i'th smallest element
 	int output_key;
-    vector<int> data_collection
+    vector<int> data_collection;
     for(int i=0;i<tree[0];i++)
     {
         if((i+1)%3==0)
         {
-            data_collection.push_back(data[i]);
+            data_collection.push_back(tree[i]);
         }
     }
     sort(data_collection.begin(),data_collection.end());
