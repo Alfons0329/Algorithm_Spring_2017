@@ -327,7 +327,7 @@ void Insert(int * tree, int key)
 
     for(int i=0;i<tree[0];i++) //build the tree from a given array's data
     {
-        if((i+1)%3==0&&tree[i]!=-1&&tree[i]!=0)
+        if((i+1)%3==0/*&&tree[i]!=-1&&tree[i]!=0*/)
         {
             RBTree.RBTInsert(tree[i]);
         }
