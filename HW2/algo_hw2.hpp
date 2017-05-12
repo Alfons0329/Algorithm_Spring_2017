@@ -296,10 +296,11 @@ bool RBT::IsEmptyTree()
 }
 node* RBT::Predecessor(node *current)
 {
-    if (current->right_ch != NULL)
+    if (current->left_ch != NULL)
     {
-        return Rightmost(current->right_ch);
+        return Rightmost(current->left_ch);
     }
+    //if it has no
 }
 node* RBT::Rightmost(node *current)
 {
@@ -332,7 +333,6 @@ void Insert(int* tree, int key)
     RBT RBTree;
     for(int i=2;i<tree[0];i+=3) //build the tree from a given array's data
     {
-       //cout<<"I is now "<<i<<endl;
         if(tree[i]!=-1&&tree[i]!=0)
         {
             cout<<"\nInserting "<<tree[i]<<endl;
@@ -352,6 +352,27 @@ void Insert(int* tree, int key)
         current=q.front();
         q.pop();
         tree[bundle_index]=current->color;
+        //for size
+        unsigned int count_size=0;
+        node* current2=current;
+        queue<node* > q2;
+        q2.push(current2);
+        while(q2.size())
+        {
+            current2=q2.front();
+            q2.pop();
+            tree[bundle_index]=current2->color;
+            if(current2->left_ch!=NULL)
+                q2.push(current2->left_ch);
+            if(current2->right_ch!=NULL)
+                q2.push(current2->right_ch);
+            if(current2!=NULL&&current2!=RBTree.nil)
+            {
+                count_size++;
+            }
+        }
+        tree[bundle_index+2]=count_size;
+        //for size end
         if(current->left_ch!=NULL)
             q.push(current->left_ch);
         if(current->right_ch!=NULL)
@@ -380,7 +401,7 @@ void Insert(int* tree, int key)
     {
         cout<<tree[i]<<" ";
     }
-    cout<<endl;
+    cout<<"\n-----------------------------------------------------------------------------------------------------------------------";
 }
 
 void Delete(int * tree, int key)
@@ -398,7 +419,7 @@ void Delete(int * tree, int key)
             RBTree.RBTInsert(tree[i]);
         }
     }
-    cout<<"delete reconstruction ok "<<endl;
+    //cout<<"delete reconstruction ok "<<endl;
     node* delete_node = RBTree.Search(key);
     cout<<"delete search ok "<<endl;
     if (delete_node == NULL)
@@ -460,8 +481,6 @@ void Delete(int * tree, int key)
     }
     cout<<"Delete data is "<<to_be_deleted->data<<endl;
     delete to_be_deleted;
-    cout<<"Deletion all ok ,ready for write back procedure "<<endl;
-
     //assign to be all null first, then WB
     for(int i=1;i<tree[0];i++)
     {
@@ -477,6 +496,27 @@ void Delete(int * tree, int key)
         current=q.front();
         q.pop();
         tree[bundle_index]=current->color;
+        //for size
+        unsigned int count_size=0;
+        node* current2=current;
+        queue<node* > q2;
+        q2.push(current2);
+        while(q2.size())
+        {
+            current2=q2.front();
+            q2.pop();
+            tree[bundle_index]=current2->color;
+            if(current2->left_ch!=NULL)
+                q2.push(current2->left_ch);
+            if(current2->right_ch!=NULL)
+                q2.push(current2->right_ch);
+            if(current2!=NULL&&current2!=RBTree.nil)
+            {
+                count_size++;
+            }
+        }
+        tree[bundle_index+2]=count_size;
+        //for size end
         if(current->left_ch!=NULL)
             q.push(current->left_ch);
         if(current->right_ch!=NULL)
@@ -505,7 +545,7 @@ void Delete(int * tree, int key)
     {
         cout<<tree[i]<<" ";
     }
-    cout<<endl;
+    cout<<"\n-----------------------------------------------------------------------------------------------------------------------";
 }
 
 int Select(int * tree, int ith) //from the samllest to count
@@ -513,23 +553,38 @@ int Select(int * tree, int ith) //from the samllest to count
 	// use Dynamic Order Statistics to tell me the i'th smallest element
 	int output_key;
     vector<int> data_collection;
-    for(int i=0;i<tree[0];i++)
+    for(int i=1;i<tree[0];i+=3)
     {
-        if((i+1)%3==0)
+        if(tree[i]!=-1&&tree[i]!=0)
         {
             data_collection.push_back(tree[i]);
         }
     }
     sort(data_collection.begin(),data_collection.end());
-    output_key=data_collection[ith];
+    output_key=data_collection[ith-1];//since from 1 base to 0 base
 	return output_key;
 }
 
-int Rank(int * tree, int x)
+int Rank(int * tree, int key_in)
 {
 
 	// use Dynamic Order Statistics to tell me the rank of element x in the tree
-	int output_rank;
+    int output_rank=0;
+    vector<int> data_collection;
+    for(int i=1;i<tree[0];i+=3)
+    {
+        if(tree[i]!=-1&&tree[i]!=0)
+        {
+            data_collection.push_back(tree[i]);
+        }
+    }
+    sort(data_collection.begin(),data_collection.end());
+    for(;output_rank<tree[0];output_rank++)
+    {
+        if(key_in==data_collection[output_rank])
+            break;
+    }
+    //using BFS algorithm to traverse down to see how many nodes are under the current root ith
 
-	return output_rank;
+	return output_rank+1;//since from 0 base to 1 base
 }
