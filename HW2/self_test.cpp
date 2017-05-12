@@ -30,16 +30,10 @@ int main()
         {
             cout<<" Inserting: "<<test_array[i];
             Insert(test_array_ptr,-999);
-
-            cout<<"\nTest array after insertion result: ";
-            for(int i=0;i<test_array.size();i++)
-            {
-                cout<<test_array_ptr[i]<<" ";
-            }
         }
 
     }
-    cout<<"\nTest array after insertion DONE FOR ALL result: ";
+    cout<<"\nTest array after INSERTION DONE FOR ALL result: ";
     for(int i=0;i<test_array.size();i++)
     {
         cout<<test_array_ptr[i]<<" ";
@@ -54,14 +48,13 @@ int main()
             break;
         }
         Delete(test_array_ptr,key_command);
-        cout<<"\nTest array after insertion result: ";
-        for(int i=0;i<test_array.size();i++)
-        {
-            cout<<test_array_ptr[i]<<" ";
-        }
-
     }
-    cout<<endl;
+    cout<<"\nTest array after DELETION DONE FOR ALL result: ";
+    for(int i=0;i<test_array.size();i++)
+    {
+        cout<<test_array_ptr[i]<<" ";
+    }
+    cout<<"\n-----------------------------------------------------------------------------------------------------------------------";;
     while(1)
     {
         cout<<"\nQuery the Order Statistics, find the ith smallest element ,enter i (-1 to terminate)";
@@ -71,6 +64,17 @@ int main()
             break;
         }
         printf("The %d th smallest element in RBT is %d  ",key_command,Select(test_array_ptr,key_command));
+    }
+    cout<<"\n-----------------------------------------------------------------------------------------------------------------------";
+    while(1)
+    {
+        cout<<"\nQuery the Order Statistics, find the element is ith smallest ,enter i (-1 to terminate)";
+        cin>>key_command;
+        if(key_command==-1)
+        {
+            break;
+        }
+        printf("The %d  element in RBT is in the rank of %d  ",key_command,Rank(test_array_ptr,key_command));
     }
     return 0;
 }

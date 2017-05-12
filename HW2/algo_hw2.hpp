@@ -237,11 +237,14 @@ void RBT::RBTInsertFixUp(node *current)
 // for color: 0: black, 1: red
 void RBT::RBTDeleteFixUp(node* current)
 {
+
+    cout<<"To be delete child fix is"<<current->data<<endl;
     if(current->color==1) //if current to fix is red, mark it as black
     {
+        cout<<87<<endl;
         current->color=0;
     }
-    if(current->parent==nil) //if current to fix is root, mark it as black
+    if(current==root) //if current to fix is root, mark it as black
     {
         current->color=0;
     }
@@ -286,9 +289,37 @@ void RBT::RBTDeleteFixUp(node* current)
         }
         else
         {
-
+            node*sibling = current->parent->left_ch;
+            if (sibling->color == 1)
+            {
+                sibling->color = 0;
+                current->parent->color = 1;
+                RightRotation(current->parent);
+                sibling = current->parent->left_ch;
+            }
+            if (sibling->left_ch->color == 0 && sibling->right_ch->color == 0)
+            {
+                sibling->color = 1;
+                current = current->parent;
+            }
+            else {
+                if (sibling->left_ch->color == 0){
+                    sibling->right_ch->color = 0;
+                    sibling->color = 1;
+                    LeftRotation(sibling);
+                    sibling = current->parent->left_ch;
+                }
+                // 經過Case3後, 一定會變成Case4
+                // Case 4: sibling的left child 是紅色的, rightt child是黑色
+                sibling->color = current->parent->color;
+                current->parent->color = 0;
+                sibling->left_ch->color = 0;
+                RightRotation(current->parent);
+                current = root;     // 將current移動到root, 一定跳出迴圈
+            }
         }
     }
+    current->color = 1;
 }
 bool RBT::IsEmptyTree()
 {
@@ -304,7 +335,7 @@ node* RBT::Predecessor(node *current)
 }
 node* RBT::Rightmost(node *current)
 {
-    while(current->right_ch!=NULL)
+    while(current->right_ch!=nil&&current->right_ch!=NULL)
     {
         current=current->right_ch;
     }
@@ -343,6 +374,14 @@ void Insert(int* tree, int key)
         RBTree.RBTInsert(key);
 
     //write back to the given array using level order traversal
+
+    //assign to be all null first, then WB
+
+    for(int i=1;i<tree[0];i++)
+    {
+        tree[i]=-1;
+    }
+
     unsigned int bundle_index=1;
     node* current=RBTree.root;
     queue<node* > q;
@@ -350,34 +389,63 @@ void Insert(int* tree, int key)
     while(q.size())
     {
         current=q.front();
-        q.pop();
-        tree[bundle_index]=current->color;
-        //for size
-        unsigned int count_size=0;
-        node* current2=current;
-        queue<node* > q2;
-        q2.push(current2);
-        while(q2.size())
+        /*if(current)
         {
-            current2=q2.front();
-            q2.pop();
-            tree[bundle_index]=current2->color;
-            if(current2->left_ch!=NULL)
-                q2.push(current2->left_ch);
-            if(current2->right_ch!=NULL)
-                q2.push(current2->right_ch);
-            if(current2!=NULL&&current2!=RBTree.nil)
+            if(current->data>0)
             {
-                count_size++;
+                cout<<"BFS TRAVERSE TO "<<current->data<<endl;
+            }
+            else if(current->data==0)
+            {
+                cout<<"BFS TRAVERSE TO NIL"<<endl;
             }
         }
-        tree[bundle_index+2]=count_size;
+        else
+        {
+            cout<<"BFS TRAVERSE TO NULL"<<endl;
+        }*/
+        q.pop();
+
+        //for size　ONLY IF THE CURRENT IS NOT NULL SHOULD WE TRAVERSE DOWN TO SUM UP THE SIZE
+        if(current!=NULL)
+        {
+            unsigned int count_size=0;
+            node* current2=current;
+            queue<node* > q2;
+            q2.push(current2);
+            while(q2.size())
+            {
+                current2=q2.front();
+                q2.pop();
+                if(current2->left_ch!=NULL)
+                    q2.push(current2->left_ch);
+                if(current2->right_ch!=NULL)
+                    q2.push(current2->right_ch);
+                if(current2!=NULL&&current2!=RBTree.nil)
+                {
+                    count_size++;
+                }
+                else if(current==NULL)
+                {
+                    count_size=-1;
+                }
+            }
+            tree[bundle_index+2]=count_size;
+        }
+
         //for size end
-        if(current->left_ch!=NULL)
+        /*if(current->left_ch!=NULL)
             q.push(current->left_ch);
         if(current->right_ch!=NULL)
             q.push(current->right_ch);
+        if(current->left_ch==NULL&&current->right_ch==NULL)
+            continue;*/
+        if(current!=NULL)
+        {
 
+            q.push(current->left_ch);
+            q.push(current->right_ch);
+        }
 
         if(current==RBTree.nil)
         {
@@ -386,6 +454,7 @@ void Insert(int* tree, int key)
         }
         else if(current==NULL)
         {
+
             tree[bundle_index+0]=-1;
             tree[bundle_index+1]=-1;
         }
@@ -397,6 +466,7 @@ void Insert(int* tree, int key)
         bundle_index+=3;
     }
     cout<<"Write back procedure OK ALL DONE, after WB, tree data to be: "<<endl;
+    tree[1]=0;
     for(int i=0;i<tree[0];i++)
     {
         cout<<tree[i]<<" ";
@@ -424,7 +494,7 @@ void Delete(int * tree, int key)
     cout<<"delete search ok "<<endl;
     if (delete_node == NULL)
     {
-        std::cout << "data not found.\n";
+        cout << "data not found.\n";
         return;
     }
     node* to_be_deleted = NULL;
@@ -437,6 +507,7 @@ void Delete(int * tree, int key)
     else   //2 child case turn to 1 thild, assign its data and delete its Predecessor
     {
         to_be_deleted = RBTree.Predecessor(delete_node);
+        cout<<"2 CHILD TYPE DELETE TO BE Predecessor"<<to_be_deleted->data<<endl;
     }
     cout<<"assign deletion node ok "<<endl;
 
@@ -451,7 +522,7 @@ void Delete(int * tree, int key)
     }
 
 
-    to_be_deleted_child->parent = to_be_deleted->parent;//re-connection
+
 
     cout<<"assign deletion connectivity ok "<<endl;
 
@@ -461,10 +532,12 @@ void Delete(int * tree, int key)
     }
     else if (to_be_deleted == to_be_deleted->parent->left_ch)
     {
+        to_be_deleted_child->parent = to_be_deleted->parent;//re-connection
         to_be_deleted->parent->left_ch = to_be_deleted_child; //connectivity of to_be_deleted_parent's left_ch
     }
     else
     {
+        to_be_deleted_child->parent = to_be_deleted->parent;//re-connection
         to_be_deleted->parent->right_ch = to_be_deleted_child; //connectivity of to_be_deleted_parent's right_ch
     }
 
@@ -476,7 +549,9 @@ void Delete(int * tree, int key)
 
     if (to_be_deleted->color == 0)
     {
+        cout<<"TBT "<<to_be_deleted->data<<endl;
         RBTree.RBTDeleteFixUp(to_be_deleted_child); //if the node deleted is black ,then fix it from
+
         //fix up from its child
     }
     cout<<"Delete data is "<<to_be_deleted->data<<endl;
@@ -494,34 +569,57 @@ void Delete(int * tree, int key)
     while(q.size())
     {
         current=q.front();
-        q.pop();
-        tree[bundle_index]=current->color;
-        //for size
-        unsigned int count_size=0;
-        node* current2=current;
-        queue<node* > q2;
-        q2.push(current2);
-        while(q2.size())
+        /*if(current)
         {
-            current2=q2.front();
-            q2.pop();
-            tree[bundle_index]=current2->color;
-            if(current2->left_ch!=NULL)
-                q2.push(current2->left_ch);
-            if(current2->right_ch!=NULL)
-                q2.push(current2->right_ch);
-            if(current2!=NULL&&current2!=RBTree.nil)
+            if(current->data>0)
             {
-                count_size++;
+                cout<<"BFS TRAVERSE TO "<<current->data<<endl;
             }
+            else if(current->data==0)
+            {
+                cout<<"BFS TRAVERSE TO NIL"<<endl;
+            }
+        }*/
+        q.pop();
+
+        //for size　ONLY IF THE CURRENT IS NOT NULL SHOULD WE TRAVERSE DOWN TO SUM UP THE SIZE
+        if(current!=NULL)
+        {
+            unsigned int count_size=0;
+            node* current2=current;
+            queue<node* > q2;
+            q2.push(current2);
+            while(q2.size())
+            {
+                current2=q2.front();
+                q2.pop();
+                if(current2->left_ch!=NULL)
+                    q2.push(current2->left_ch);
+                if(current2->right_ch!=NULL)
+                    q2.push(current2->right_ch);
+                if(current2!=NULL&&current2!=RBTree.nil)
+                {
+                    count_size++;
+                }
+                else if(current==NULL)
+                {
+                    count_size=-1;
+                }
+            }
+            tree[bundle_index+2]=count_size;
         }
-        tree[bundle_index+2]=count_size;
         //for size end
-        if(current->left_ch!=NULL)
+        /*if(current->left_ch!=NULL)
             q.push(current->left_ch);
         if(current->right_ch!=NULL)
             q.push(current->right_ch);
-
+        if(current->left_ch==NULL&&current->right_ch==NULL)
+            continue;*/
+        if(current!=NULL)
+        {
+            q.push(current->left_ch);
+            q.push(current->right_ch);
+        }
 
         if(current==RBTree.nil)
         {
@@ -541,6 +639,7 @@ void Delete(int * tree, int key)
         bundle_index+=3;
     }
     cout<<"Write back procedure OK ALL DONE, after WB, tree data to be: "<<endl;
+    tree[1]=0;
     for(int i=0;i<tree[0];i++)
     {
         cout<<tree[i]<<" ";
@@ -553,7 +652,7 @@ int Select(int * tree, int ith) //from the samllest to count
 	// use Dynamic Order Statistics to tell me the i'th smallest element
 	int output_key;
     vector<int> data_collection;
-    for(int i=1;i<tree[0];i+=3)
+    for(int i=2;i<tree[0];i+=3)
     {
         if(tree[i]!=-1&&tree[i]!=0)
         {
@@ -571,7 +670,7 @@ int Rank(int * tree, int key_in)
 	// use Dynamic Order Statistics to tell me the rank of element x in the tree
     int output_rank=0;
     vector<int> data_collection;
-    for(int i=1;i<tree[0];i+=3)
+    for(int i=2;i<tree[0];i+=3)
     {
         if(tree[i]!=-1&&tree[i]!=0)
         {
