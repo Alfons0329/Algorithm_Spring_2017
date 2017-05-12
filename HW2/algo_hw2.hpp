@@ -107,32 +107,32 @@ void RBT::LeftRotation(node *x) //x is the rotation point current in
     x->parent = y;//reconnection for parent-child relationship
 }
 //mirror to RightRotation
-void RBT::RightRotation(node *x) //x is the rotation point current in
+void RBT::RightRotation(node *y)
 {
-    node *y = x->left_ch;  //locate position
 
-    x->left_ch = y->right_ch; //reconnection
-    if (y->right_ch != nil)
-    {
-        y->right_ch->parent = x;
-    }
+    node *x = y->left_ch;
 
-    y->parent = x->parent; //set the parent for rotation
+    y->left_ch = x->right_ch;
+    if (x->right_ch != nil)
+    {
+        x->right_ch->parent = y;
+    }
+    x->parent = y->parent;
 
-    if (x->parent == nil)//if root
+    if (y->parent == nil)
     {
-        root = y; //then root will be y
+        root = x;
     }
-    else if (x == x->parent->right_ch) //reconnection for parent-child relationship
+    else if (y == y->parent->left_ch)
     {
-        x->parent->right_ch = y;
+        y->parent->left_ch = x;
     }
-    else //reconnection for parent-child relationship
+    else
     {
-        x->parent->left_ch = y;
+        y->parent->right_ch = x;
     }
-    y->right_ch = x;//reconnection for parent-child relationship
-    x->parent = y;//reconnection for parent-child relationship
+    x->right_ch = y;
+    y->parent = x;
 }
 void RBT::RBTInsert(int key_in)
 {
@@ -238,16 +238,7 @@ void RBT::RBTInsertFixUp(node *current)
 void RBT::RBTDeleteFixUp(node* current)
 {
 
-    cout<<"To be delete child fix is"<<current->data<<endl;
-    if(current->color==1) //if current to fix is red, mark it as black
-    {
-        cout<<87<<endl;
-        current->color=0;
-    }
-    if(current==root) //if current to fix is root, mark it as black
-    {
-        current->color=0;
-    }
+    ////cout<<"To be delete child fix is"<<current->data<<endl;
     while(current != root &&current->color==0)
     {
         if (current == current->parent->left_ch)
@@ -256,6 +247,7 @@ void RBT::RBTDeleteFixUp(node* current)
             // Case1: Iif sibling  is red
             if (sibling->color == 1)
             {
+                ////cout<<"Delete 2 wrong at this case!!!!!77777777!!!!!!!"<<endl;
                 sibling->color = 0;
                 current->parent->color = 1;
                 LeftRotation(current->parent);
@@ -265,6 +257,7 @@ void RBT::RBTDeleteFixUp(node* current)
             // Case2: sibling's 2 child are all black node
             if (sibling->left_ch->color == 0 && sibling->right_ch->color == 0)
             {
+                ////cout<<"Delete 2 wrong at this case!!!6666666!!!!"<<endl;
                 sibling->color = 1;
                 current = current->parent;           // if update till root,than exit the loop
             }
@@ -273,6 +266,7 @@ void RBT::RBTDeleteFixUp(node* current)
                 //case3: siblinf's right child is black
                 if (sibling->right_ch->color == 0)
                 {
+                    ////cout<<"Delete 2 wrong at this case!!!!!!!!!!!!!!!!!!!!"<<endl;
                     sibling->left_ch->color = 0;
                     sibling->color = 1;
                     RightRotation(sibling);
@@ -280,6 +274,7 @@ void RBT::RBTDeleteFixUp(node* current)
                 }
                 // After case3 will become case 4
                 // Case 4: sibling's right child is red, left childis black
+                ////cout<<"Delete 2 wrong at this case!!!!!!555555555555!!!!!!"<<endl;
                 sibling->color = current->parent->color;
                 current->parent->color = 0;
                 sibling->right_ch->color = 0;
@@ -309,17 +304,15 @@ void RBT::RBTDeleteFixUp(node* current)
                     LeftRotation(sibling);
                     sibling = current->parent->left_ch;
                 }
-                // 經過Case3後, 一定會變成Case4
-                // Case 4: sibling的left child 是紅色的, rightt child是黑色
                 sibling->color = current->parent->color;
                 current->parent->color = 0;
                 sibling->left_ch->color = 0;
                 RightRotation(current->parent);
-                current = root;     // 將current移動到root, 一定跳出迴圈
+                current = root;
             }
         }
     }
-    current->color = 1;
+    current->color = 0;
 }
 bool RBT::IsEmptyTree()
 {
@@ -392,16 +385,16 @@ void Insert(int* tree, int key)
         {
             if(current->data>0)
             {
-                cout<<"BFS TRAVERSE TO "<<current->data<<endl;
+                //cout<<"BFS TRAVERSE TO "<<current->data<<endl;
             }
             else if(current->data==0)
             {
-                cout<<"BFS TRAVERSE TO NIL"<<endl;
+                //cout<<"BFS TRAVERSE TO NIL"<<endl;
             }
         }
         else
         {
-            cout<<"BFS TRAVERSE TO NULL"<<endl;
+            //cout<<"BFS TRAVERSE TO NULL"<<endl;
         }*/
         q.pop();
 
@@ -488,9 +481,9 @@ void Delete(int * tree, int key)
             RBTree.RBTInsert(tree[i]);
         }
     }
-    //cout<<"delete reconstruction ok "<<endl;
+    cout<<"delete reconstruction ok "<<endl;
     node* delete_node = RBTree.Search(key);
-    cout<<"delete search ok "<<endl;
+    ////cout<<"delete search ok "<<endl;
     if (delete_node == NULL)
     {
         cout << "data not found.\n";
@@ -506,7 +499,7 @@ void Delete(int * tree, int key)
     else   //2 child case turn to 1 thild, assign its data and delete its Predecessor
     {
         to_be_deleted = RBTree.Predecessor(delete_node);
-        cout<<"2 CHILD TYPE DELETE TO BE Predecessor"<<to_be_deleted->data<<endl;
+        //cout<<"2 CHILD TYPE DELETE TO BE Predecessor"<<to_be_deleted->data<<endl;
     }
     cout<<"assign deletion node ok "<<endl;
 
@@ -548,12 +541,12 @@ void Delete(int * tree, int key)
 
     if (to_be_deleted->color == 0)
     {
-        cout<<"TBT "<<to_be_deleted->data<<endl;
+        //cout<<"TBT "<<to_be_deleted->data<<endl;
         RBTree.RBTDeleteFixUp(to_be_deleted_child); //if the node deleted is black ,then fix it from
 
         //fix up from its child
     }
-    cout<<"Delete data is "<<to_be_deleted->data<<endl;
+    //cout<<"Delete data is "<<to_be_deleted->data<<endl;
     delete to_be_deleted;
     //assign to be all null first, then WB
     for(int i=1;i<tree[0];i++)
@@ -572,11 +565,11 @@ void Delete(int * tree, int key)
         {
             if(current->data>0)
             {
-                cout<<"BFS TRAVERSE TO "<<current->data<<endl;
+                //cout<<"BFS TRAVERSE TO "<<current->data<<endl;
             }
             else if(current->data==0)
             {
-                cout<<"BFS TRAVERSE TO NIL"<<endl;
+                //cout<<"BFS TRAVERSE TO NIL"<<endl;
             }
         }*/
         q.pop();

@@ -21,7 +21,7 @@ std::vector<int> test_array1 = {
 std::vector<int> test_array2 = {
 	//64,
 //-1,-1,-1,
-190,
+ 190,
  0, 5,14,
  0, 2, 3,
  0,30,10,
