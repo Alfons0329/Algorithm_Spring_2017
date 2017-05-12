@@ -286,7 +286,7 @@ void RBT::RBTDeleteFixUp(node* current)
         }
         else
         {
-            
+
         }
     }
 }
@@ -375,6 +375,12 @@ void Insert(int* tree, int key)
         }
         bundle_index+=3;
     }
+    cout<<"Write back procedure OK ALL DONE, after WB, tree data to be: "<<endl;
+    for(int i=0;i<tree[0];i++)
+    {
+        cout<<tree[i]<<" ";
+    }
+    cout<<endl;
 }
 
 void Delete(int * tree, int key)
@@ -392,8 +398,9 @@ void Delete(int * tree, int key)
             RBTree.RBTInsert(tree[i]);
         }
     }
-
+    cout<<"delete reconstruction ok "<<endl;
     node* delete_node = RBTree.Search(key);
+    cout<<"delete search ok "<<endl;
     if (delete_node == NULL)
     {
         std::cout << "data not found.\n";
@@ -401,7 +408,7 @@ void Delete(int * tree, int key)
     }
     node* to_be_deleted = NULL;
     node* to_be_deleted_child = NULL;     //to_be_deleted_child to be deleted's child
-
+    cout<<"Start delete"<<endl;
     if (delete_node->left_ch == RBTree.nil || delete_node->right_ch == RBTree.nil) //not the 2 children case
     {
         to_be_deleted = delete_node;
@@ -410,7 +417,7 @@ void Delete(int * tree, int key)
     {
         to_be_deleted = RBTree.Predecessor(delete_node);
     }
-
+    cout<<"assign deletion node ok "<<endl;
 
     if (to_be_deleted->left_ch != RBTree.nil)
     {
@@ -424,6 +431,8 @@ void Delete(int * tree, int key)
 
 
     to_be_deleted_child->parent = to_be_deleted->parent;//re-connection
+
+    cout<<"assign deletion connectivity ok "<<endl;
 
     if (to_be_deleted->parent == RBTree.nil)  //if to_be_deleted is the root then set the root as to_be_deleted_child
     {
@@ -449,8 +458,54 @@ void Delete(int * tree, int key)
         RBTree.RBTDeleteFixUp(to_be_deleted_child); //if the node deleted is black ,then fix it from
         //fix up from its child
     }
+    cout<<"Delete data is "<<to_be_deleted->data<<endl;
     delete to_be_deleted;
+    cout<<"Deletion all ok ,ready for write back procedure "<<endl;
 
+    //assign to be all null first, then WB
+    for(int i=1;i<tree[0];i++)
+    {
+        tree[i]=-1;
+    }
+
+    unsigned int bundle_index=1;
+    node* current=RBTree.root;
+    queue<node* > q;
+    q.push(current);
+    while(q.size())
+    {
+        current=q.front();
+        q.pop();
+        tree[bundle_index]=current->color;
+        if(current->left_ch!=NULL)
+            q.push(current->left_ch);
+        if(current->right_ch!=NULL)
+            q.push(current->right_ch);
+
+
+        if(current==RBTree.nil)
+        {
+            tree[bundle_index+0]=0;
+            tree[bundle_index+1]=0;
+        }
+        else if(current==NULL)
+        {
+            tree[bundle_index+0]=-1;
+            tree[bundle_index+1]=-1;
+        }
+        else
+        {
+            tree[bundle_index+0]=current->color;
+            tree[bundle_index+1]=current->data;
+        }
+        bundle_index+=3;
+    }
+    cout<<"Write back procedure OK ALL DONE, after WB, tree data to be: "<<endl;
+    for(int i=0;i<tree[0];i++)
+    {
+        cout<<tree[i]<<" ";
+    }
+    cout<<endl;
 }
 
 int Select(int * tree, int ith) //from the samllest to count
