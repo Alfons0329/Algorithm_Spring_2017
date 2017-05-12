@@ -143,7 +143,7 @@ void RBT::RBTInsert(int key_in)
     while (x != nil)
     {
         y = x;
-        if (insert_node->data <= x->data)
+        if (insert_node->data < x->data)
         {
             x = x->left_ch;
         }
@@ -366,7 +366,6 @@ void Insert(int* tree, int key)
     {
         if(tree[i]!=-1&&tree[i]!=0)
         {
-            cout<<"\nInserting "<<tree[i]<<endl;
             RBTree.RBTInsert(tree[i]);
         }
     }
@@ -471,7 +470,7 @@ void Insert(int* tree, int key)
     {
         cout<<tree[i]<<" ";
     }
-    cout<<"\n-----------------------------------------------------------------------------------------------------------------------";
+    cout<<"\n-----------------------------------------------------------------------------------------------------------------------\n";
 }
 
 void Delete(int * tree, int key)
@@ -644,7 +643,7 @@ void Delete(int * tree, int key)
     {
         cout<<tree[i]<<" ";
     }
-    cout<<"\n-----------------------------------------------------------------------------------------------------------------------";
+    cout<<"\n-----------------------------------------------------------------------------------------------------------------------\n";
 }
 
 int Select(int * tree, int ith) //from the samllest to count
