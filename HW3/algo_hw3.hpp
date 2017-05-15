@@ -33,11 +33,11 @@ void find_LCS(int* xarr,int xlen, int ylen,int* carr,vector<vector<int> > prevli
         LCS_string+=xarr[xlen];
         find_LCS(xarr,xlen-1,ylen-1,carr,prevlist,LCS_string);
     }
-    else if(prevlist[xlen][ylen]==1)
+    else if(prevlist[xlen][ylen]==1)//from L side
     {
         find_LCS(xarr,xlen,ylen-1,carr,prevlist,LCS_string);
     }
-    else if(prevlist[xlen][ylen]==2)
+    else if(prevlist[xlen][ylen]==2)//from U side
     {
         find_LCS(xarr,xlen-1,ylen,carr,prevlist,LCS_string);
     }
@@ -59,7 +59,7 @@ void LCS(int* xarr, int* yarr, int* carr) //find the length
             if (xarr[i - 1] == yarr[j - 1])
             {
                 dplist[i][j] = dplist[i - 1][j - 1] + 1; //increase by one, the encountered pattern
-                prevlist[i][j] = 0; //LU
+                prevlist[i][j] = 0; //from LU
             }
             else
             {
@@ -71,7 +71,7 @@ void LCS(int* xarr, int* yarr, int* carr) //find the length
                 else
                 {
                     dplist[i][j] = dplist[i-1][j];
-                    prevlist[i][j]=2;
+                    prevlist[i][j]=2;//fomr U
                 }
             }
         }
