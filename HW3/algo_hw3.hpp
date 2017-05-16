@@ -6,7 +6,6 @@
 using namespace std;
 static const char* student_id = "0416324" ;
 
-
 // do not edit prototype
 void LCS(int *, int*, int*);
 
@@ -23,7 +22,7 @@ void LCS(int *, int*, int*);
 //
 // do your homework here
 //
-void find_LCS(int* xarr,int xlen, int ylen,int* carr,vector<vector<int> > prevlist,string LCS_string)
+void find_LCS(int* xarr,int xlen, int ylen,int* carr,vector<vector<int> > prevlist,string& LCS_string)
 {
     if(xlen==0||ylen==0)
         return ; //print until one str is end
@@ -31,6 +30,7 @@ void find_LCS(int* xarr,int xlen, int ylen,int* carr,vector<vector<int> > prevli
     if(prevlist[xlen][ylen]==0) //from LU,equal
     {
         LCS_string+=xarr[xlen];
+        //cout<<"LCS STRING IS CURRENT NOW "<<LCS_string<<endl;
         find_LCS(xarr,xlen-1,ylen-1,carr,prevlist,LCS_string);
     }
     else if(prevlist[xlen][ylen]==1)//from L side
@@ -45,6 +45,7 @@ void find_LCS(int* xarr,int xlen, int ylen,int* carr,vector<vector<int> > prevli
 void LCS(int* xarr, int* yarr, int* carr) //find the length
 {
     unsigned int xlen=xarr[0],ylen=yarr[0];
+
     //(m+1)*(n+1) table
     vector<vector<int> > dplist(xlen, vector<int>(ylen));//2d dp array for character matching increase by one for convenience
     vector<vector<int> > prevlist(xlen, vector<int>(ylen));
@@ -53,10 +54,11 @@ void LCS(int* xarr, int* yarr, int* carr) //find the length
 		for (int j = 0; j < dplist[i].size(); j++)
 			dplist[i][j] = 0;
     //dp traverse
-    for (int i = 1; i <= xlen; i++)
-        for (int j = 1; j <= ylen; j++)
+    for (int i = 1; i < xlen/*was increment by 1, so no equal*/; i++)
+        for (int j = 1; j < ylen/*was increment by 1, so no equal*/; j++)
         {
-            if (xarr[i - 1] == yarr[j - 1])
+
+            if (xarr[i] == yarr[j]) //since 0 is as size for both
             {
                 dplist[i][j] = dplist[i - 1][j - 1] + 1; //increase by one, the encountered pattern
                 prevlist[i][j] = 0; //from LU
@@ -75,15 +77,14 @@ void LCS(int* xarr, int* yarr, int* carr) //find the length
                 }
             }
         }
-
-    int LCS_length =  dplist[xlen][ylen];
+    int LCS_length =  dplist[xlen-1][ylen-1];
     carr[0] = LCS_length;
-    string LCS_string;
+    string LCS_string = " ";
     LCS_string[0] = LCS_length;
-    find_LCS(xarr,xlen, ylen, carr, prevlist,LCS_string);
-    reverse(LCS_string.begin(),LCS_string.end());
-    cout<<"LCS_string ,where the first character is the LCS_length"<<LCS_string;
-    for(int i=0;i<LCS_string.size();i++)
+    find_LCS(xarr,xlen-1, ylen-1, carr, prevlist,LCS_string);
+    reverse(LCS_string.begin()+1,LCS_string.end());
+    //cout<<"LCS_string ,where the first character is the LCS_length"<<LCS_string;
+    for(int i=0;i<LCS_string.length();i++)
     {
         carr[i] = LCS_string[i];
     }

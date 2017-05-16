@@ -1,5 +1,6 @@
 #include "algo_hw3.hpp"
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 using namespace std;
 int main()
 {
@@ -10,44 +11,57 @@ int main()
     int s1_length,s2_length,s3_length,tmp;
     while(1)
     {
+        cout<<"\nEnter string s1 and s2(enter zzz for both to terminate) "<<endl;
+        cin>>str1;
+        fflush(stdin);
+        cin>>str2;
+        fflush(stdin);
 
-        cout<<"Enter string s1 length,and s2 length (enter -1 to terminate) ";
-        cin>>s1_length>>s2_length;
-        if(s1_length<0 || s2_length<0)
+        if(str1=="zzz"&&str2=="zzz")
             break;
+
+        s1_length=str1.length();
+        s2_length=str2.length();
+
         s3_length=s1_length+s2_length+1;
         s1=new int[s1_length+1];//for s1[0] for size
         s2=new int[s2_length+1];//for s2[0] for size
         s3=new int[s3_length];
 
-        s1[0]=s1_length;
-        s2[0]=s2_length;
-        //cout<<"Enter string s1 and s2 :";
-        //cin>>str1>>str2;
-        cout<<"(Debug test) str2 in ptr s2 is :";
-        /*for(int i=0;i<s3_length;i++)
-            s3[i]=-1;*/
+        s1[0]=s1_length+1;
+        s2[0]=s2_length+1;
+
+        for(int i=0;i<s3_length;i++)
+            s3[i]=-1;
 
         for(int i=1;i<=s1_length;i++)
             s1[i]=str1[i-1];
-        cout<<456;
         /*cout<<"(Debug test) str1 in ptr s1 is with length"<<s1_length<<endl;
-        for(int i=0;i<=s1_length;i++)
-            cout<<s1[i]<<" AND I IS NOW "<<i<<"   ";*/
+        cout.flush();*/
+        /*for(int i=0;i<=s1_length;i++)
+            cout<<s1[i]<<"and i is now "<<i<<"   ";*/
 
 
 
         for(int i=1;i<=s2_length;i++)
             s2[i]=str2[i-1];
+        /*cout<<"\n(Debug test) str2 in ptr s2 is with length"<<s2_length<<endl;
+        cout.flush();*/
+        /*for(int i=0;i<=s2_length;i++)
+        {
+            cout<<s2[i]<<"and i is now "<<i<<"   ";
+            cout.flush();
+        }*/
 
-        cout<<789;
-        for(int i=0;i<=s2_length;i++)
-            cout<<s2[i]<<" ";
 
         LCS(s1,s2,s3);
+
         str1.clear();
         str2.clear();
-
+        cout<<"\nFor the final result which is str3 is as ";
+        cout<<s3[0]<<" ";
+        for(int i=1;i<s3_length;i++)
+            printf("%c ",s3[i]);
         delete s1;
         delete s2;
         delete s3;
