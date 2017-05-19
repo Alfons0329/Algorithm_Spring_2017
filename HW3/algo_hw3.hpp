@@ -25,8 +25,8 @@ void LCS(int *, int*, int*);
 void LCS(int* xarr, int* yarr, int* carr) //find the length
 {
     unsigned int xlen=xarr[0],ylen=yarr[0],LCS_length=0;
-    string LCS_string = " ";
-
+    //string LCS_string = " ";
+    string LCS_string;
     //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
     //(m+1)*(n+1) table ***********************I HAVE ONLY ONE TABLE NOW**********************************
     //**************************************************************************************************//
@@ -67,9 +67,9 @@ void LCS(int* xarr, int* yarr, int* carr) //find the length
             }
         }
     /*int LCS_length =  dplist[xlen-1][ylen-1];*/
-    carr[0] = LCS_length;
+    //carr[0] = LCS_length;
     //cout<<"LCS is "<<LCS_string<<"      with its length "<<LCS_length<<endl;
-    for(int i=1;i<LCS_string.length();i++)
+    for(int i=0;i<LCS_string.length();i++)
     {
         carr[i] = LCS_string[i];
     }

@@ -23,7 +23,7 @@ int main()
         s1_length=str1.length();
         s2_length=str2.length();
 
-        s3_length=s1_length+s2_length+1;
+        s3_length=s1_length+s2_length;
         s1=new int[s1_length+1];//for s1[0] for size
         s2=new int[s2_length+1];//for s2[0] for size
         s3=new int[s3_length];
@@ -59,8 +59,7 @@ int main()
         str1.clear();
         str2.clear();
         cout<<"\nFor the final result which is str3 is as ";
-        cout<<s3[0]<<" ";
-        for(int i=1;i<s3_length;i++)
+        for(int i=0;i<s3_length;i++)
             printf("%c ",s3[i]);
         delete s1;
         delete s2;
