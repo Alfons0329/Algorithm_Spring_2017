@@ -8,7 +8,7 @@ static const char* student_id = "0416324" ;
 
 // do not edit prototype
 void LCS(int *, int*, int*);
-
+void getLCS(int* , int* , int*  ,vector<vector <int> >,string& );
 // X,Y are input strings, C is answer string
 //
 // data structure :
@@ -25,12 +25,23 @@ void LCS(int *, int*, int*);
 void LCS(int* xarr, int* yarr, int* carr) //find the length
 {
     unsigned int xlen=xarr[0],ylen=yarr[0],LCS_length=0;
-    //string LCS_string = " ";
     string LCS_string;
     //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
-    //(m+1)*(n+1) table ***********************I HAVE ONLY ONE TABLE NOW**********************************
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
     //**************************************************************************************************//
     vector<vector<int> > dplist(xlen, vector<int>(ylen));//2d dp array for character matching increase by one for convenience
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
+    //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
     //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
     //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
     //*************I HAVE ONLY ONE TABLE NOW*************I HAVE ONLY ONE TABLE NOW**********************//
@@ -41,36 +52,37 @@ void LCS(int* xarr, int* yarr, int* carr) //find the length
     for (int i = 1; i < xlen/*was increment by 1, so no equal*/; i++)
         for (int j = 1; j < ylen/*was increment by 1, so no equal*/; j++)
         {
-
             if (xarr[i] == yarr[j]) //since 0 is as size for both
-            {
-                //printf("Find equal  %c and i is now %d j is now %d ",xarr[i],i,j);
                 dplist[i][j] = dplist[i - 1][j - 1] + 1; //increase by one, the encountered pattern
-
-                if(dplist[i][j]>LCS_length)
-                {
-                    LCS_length=dplist[i][j];
-                    LCS_string+=(char)xarr[i];
-                    //printf("LCS_length is now being updated to %c  and i is now %d j is now %d \n",xarr[i],i,j);
-                }
-            }
             else
-            {
-                if(dplist[i-1][j] < dplist[i][j-1]) //Non equal, from L
-                {
-                    dplist[i][j] = dplist[i][j-1];
-                }
-                else
-                {
-                    dplist[i][j] = dplist[i-1][j];
-                }
-            }
+                dplist[i][j] = max(dplist[i][j-1],dplist[i-1][j]);
         }
-    /*int LCS_length =  dplist[xlen-1][ylen-1];*/
-    //carr[0] = LCS_length;
-    //cout<<"LCS is "<<LCS_string<<"      with its length "<<LCS_length<<endl;
+    getLCS(xarr,yarr,carr,dplist,LCS_string);
+    reverse(LCS_string.begin(),LCS_string.end());
     for(int i=0;i<LCS_string.length();i++)
     {
         carr[i] = LCS_string[i];
+    }
+}
+void getLCS(int* xarr, int* yarr, int* carr ,vector<vector <int> >dplist,string& LCS_string)
+{
+    unsigned int xlen=xarr[0],ylen=yarr[0];
+    int current_row=xlen-1,current_col=ylen-1;
+    while(dplist[current_row][current_col])
+    {
+        if(dplist[current_row][current_col]==dplist[current_row-1][current_col])//from up
+        {
+            current_row--;
+        }
+        else if(dplist[current_row][current_col]==dplist[current_row][current_col-1])//from left
+        {
+            current_col--;
+        }
+        else if(dplist[current_row][current_col]==dplist[current_row-1][current_col-1]+1)//from left up
+        {
+            LCS_string+=(char)xarr[current_row];
+            current_row--;
+            current_col--;
+        }
     }
 }

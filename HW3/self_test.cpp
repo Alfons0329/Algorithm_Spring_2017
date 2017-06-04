@@ -36,24 +36,9 @@ int main()
 
         for(int i=1;i<=s1_length;i++)
             s1[i]=str1[i-1];
-        /*cout<<"(Debug test) str1 in ptr s1 is with length"<<s1_length<<endl;
-        cout.flush();*/
-        /*for(int i=0;i<=s1_length;i++)
-            cout<<s1[i]<<"and i is now "<<i<<"   ";*/
-
-
 
         for(int i=1;i<=s2_length;i++)
             s2[i]=str2[i-1];
-        /*cout<<"\n(Debug test) str2 in ptr s2 is with length"<<s2_length<<endl;
-        cout.flush();*/
-        /*for(int i=0;i<=s2_length;i++)
-        {
-            cout<<s2[i]<<"and i is now "<<i<<"   ";
-            cout.flush();
-        }*/
-
-
         LCS(s1,s2,s3);
 
         str1.clear();
